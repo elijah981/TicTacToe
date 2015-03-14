@@ -1,0 +1,2 @@
+This is an attempt to make a TicTacToe game which will be played between a human player and the computer.
+It will be using the minimax algorithm in its most basic form and then later on improved for better performance.
