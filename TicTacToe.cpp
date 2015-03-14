@@ -93,43 +93,43 @@ void PlayerMove(int board[9], int player)
 	while(board[num-1]!=0 || num<0 || num>9);
 	board[num-1] = player;
 }
-//
-//void ComputerMove(int board[9], int player)
-//{
-//	int move = -1, Score = -2;
-//	int i;
-//	for(i=0; i<9; i++)
-//	{
-//		if(board[i] == 0)
-//		{
-//			board[i] = player;
-//			int tempScore = -minimax(board, player);
-//			if(tempScore > Score)
-//			{
-//				Score = tempScore;
-//				move = i;
-//			}
-//			board[i] = 0;
-//		}
-//	}
-//	board[move] = player;
-//}
-//
-//void minimax(int board[9], int player)
-//{
-//	int move = -1, Score = -2;
-//	int i;
-//	for(i=0; i<9; i++)
-//	{
-//		if(board[i] == 0)
-//		{
-//			board[i] = player;
-//			int tempScore = -minimax(board, player);
-//			if(tempScore > Score)
-//			{
-//				Score = tempScore;
-//				move = i;
-//			}
-//		}
-//	}
-//}
+
+void ComputerMove(int board[9], int player)
+{
+	int move = -1, Score = -2;
+	int i;
+	for(i=0; i<9; i++)
+	{
+		if(board[i] == 0)
+		{
+			board[i] = player;
+			int tempScore = -minimax(board, player);
+			if(tempScore > Score)
+			{
+				Score = tempScore;
+				move = i;
+			}
+			board[i] = 0;
+		}
+	}
+	board[move] = player;
+}
+
+void minimax(int board[9], int player)
+{
+	int move = -1, Score = -2;
+	int i;
+	for(i=0; i<9; i++)
+	{
+		if(board[i] == 0)
+		{
+			board[i] = player;
+			int tempScore = -minimax(board, player);
+			if(tempScore > Score)
+			{
+				Score = tempScore;
+				move = i;
+			}
+		}
+	}
+}
