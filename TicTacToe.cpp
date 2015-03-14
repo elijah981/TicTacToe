@@ -4,14 +4,14 @@
 #define PLAYER 1
 #define COMPUTER 2
 
-int win(const int[9]);
+int win(const int[9],int);
 void display(int[9]);
 void PlayerMove(int[9],int);
 void ComputerMove(int[9],int);
 char GetChar(int);
-int minimax(int[9],int);
-int max(int[9]);
-int min(int[9]);
+int minimax(int[9],int,int);
+int max(int[9],int);
+int min(int[9],int);
 
 int main()
 {
@@ -23,7 +23,7 @@ int main()
 	int turn=1;
 	do{
         display(board);
-        if(win(board) != 0)
+        if(win(board,0) != 0)
 			break;
 			
 		if((turn+player)%2 == 0)
@@ -39,17 +39,17 @@ int main()
 		turn++;
 	}while(turn<=9);
 	
-	if(win(board) == 10)
+	if(win(board,0) > 0)
 		printf("\nYou win! Wow.. this is inconceivable!!");
-	else if(win(board) == -10)
+	else if(win(board,0) < -0)
 		printf("\nComputer wins! You loose.");
-	else if(win(board) == 0)
+	else if(win(board,0) == 0)
 		printf("\nDraw game.. This is drool.");
 
 	return 0;
 }
 
-int win(const int board[9])
+int win(const int board[9], int depth)
 {
 	int winner[8][3] = {{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8},{0,4,8},{2,4,6}};
 	
@@ -61,9 +61,9 @@ int win(const int board[9])
 			if(board[winner[i][0]] == board[winner[i][1]] && board[winner[i][0]] == board[winner[i][2]])
 			{
 				if(board[winner[i][0]]== PLAYER)
-					score = 10;
+					score = 10 - depth;
 				else
-					score = -10;
+					score = depth - 10;
 				break;
 			}
 		}
@@ -106,58 +106,54 @@ void PlayerMove(int board[9], int player)
 
 void ComputerMove(int board[9], int player)
 {
-	int score[9]={0};
-	int move[9]={0};
+	int score[9]={0},move[9]={0},count=0;
 	for(int i=0; i<9; i++)
 	{
 		if(board[i] == 0)
 		{
 			board[i] = player;
-			score[i] = minimax(board, 3-player);
-			move[i] = i;
+			score[count] = minimax(board, 3-player, 0);
+			move[count++] = i;
 			board[i] = 0;
 		}
-		else
-		{
-			score[i] = 1;
-			move[i] = i;
-		}
 	}
-	int index = min(score);
-	board[index] = player;
+	int index = min(score,count);
+	printf("Computer plays %d.\n",move[index]+1);
+	board[move[index]] = player;
 }
 
-int minimax(int board[9], int player)
+int minimax(int board[9], int player, int depth)
 {
 	int i;
-	if(win(board) != 0) return win(board);
+	if(win(board,depth) != 0) return win(board,depth);
 	
-	int score[9]={0};
-	int move[9]={0};
+	depth+=1;
+	
+	int score[9]={0},move[9]={0},count=0;
 	
 	for(i=0; i<9; i++)
 	{
 		if(board[i] == 0)
 		{
 			board[i] = player;
-			score[i] = minimax(board, 3-player);
-			move[i] = i;
+			score[count] = minimax(board, 3-player,depth);
+			move[count++] = i;
 			board[i] = 0;
 		}
 	}
 	
 	if(player == PLAYER)
-		return score[max(score)];
+		return score[max(score,count)];
 	else
-		return score[min(score)];
+		return score[min(score,count)];
 }
 
-int max(int score[9])
+int max(int score[9],int count)
 {
-	int i, maxScore=0,index;
-	for(i=0;i<9;i++)
+	int i, maxScore=score[0],index=0;
+	for(i=1;i<count;i++)
 	{
-		if(score[i]>maxScore)
+		if(score[i]>maxScore && score[i]!=0)
 		{
 			maxScore = score[i];
 			index = i;
@@ -166,12 +162,12 @@ int max(int score[9])
 	return index;
 }
 
-int min(int score[9])
+int min(int score[9],int count)
 {
-	int i, minScore=10,index;
-	for(i=0;i<9;i++)
+	int i, minScore=score[0],index=0;
+	for(i=1;i<count;i++)
 	{
-		if(score[i]<minScore)
+		if(score[i]<minScore && score[i]!=0)
 		{
 			minScore = score[i];
 			index = i;
