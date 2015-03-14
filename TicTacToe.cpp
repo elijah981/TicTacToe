@@ -153,6 +153,7 @@ int max(int score[9],int count)
 	int i, maxScore=score[0],index=0;
 	for(i=1;i<count;i++)
 	{
+<<<<<<< HEAD
 		if(score[i]>maxScore)
 		{
 			maxScore = score[i];
